@@ -1,6 +1,10 @@
+<img src="readme-images/fluffy.svg" alt="fluffy logo" width="200"/>
+
 # fluffy
 
 Fluffy is the easiest way to write your blog locally, in simple markdown files, preview in your browser while writing, and then publish to Amazon S3. Your site is served via CloudFront to readers worldwide, with no scaling expertise required.
+
+![fluffy UI](/readme-images/fluffy-screenshot.jpg)
 
 ## Requirements
 
