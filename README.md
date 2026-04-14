@@ -54,8 +54,8 @@ Edit `.env.local`:
 ```
 AWS_ACCESS_KEY_ID=your_access_key
 AWS_SECRET_ACCESS_KEY=your_secret_key
-AWS_DEFAULT_REGION=us-east-1
-S3_BUCKET=                        # fill in after CDK deploy
+AWS_DEFAULT_REGION=us-east-1      # or whichever region you use
+S3_BUCKET=                        # you'll fill this in after your CDK has deployed
 ```
 
 The IAM user needs permissions for CloudFormation, S3, CloudFront, IAM to bootstrap and deploy. After the initial deploy, publishing only requires S3 and CloudFront permissions.
@@ -72,9 +72,9 @@ cdk deploy
 ```
 
 After deploy, copy the outputs into your config:
-- **BucketName** → `S3_BUCKET` in `.env.local`
-- **CloudFrontDistributionId** → `cloudfront_distribution_id` in `blog/config.yaml`
-- **CloudFrontDomain** → point your DNS CNAME to this
+- **BucketName** → `S3_BUCKET` in `.env.local`  It starts with "fluffystack-blogbucket" and is followed by random letters and dashes
+- **CloudFrontDistributionId** → You'll see this in the CloudFront dashboard. Add `cloudfront_distribution_id` in `blog/config.yaml`
+- **CloudFrontDomain** → Find this in CloudFront (click on your new distribution). It looks like "DIGITS_AND_LETTERS.cloudfront.net". Point your DNS CNAME for your domain to this.
 
 ### 5. Build and publish
 
