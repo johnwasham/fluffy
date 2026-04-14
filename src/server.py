@@ -188,7 +188,7 @@ function updateLiveLink(status) {
   const link = document.getElementById('live-link');
   if (status === 'published') {
     const slug = document.getElementById('meta-slug').value;
-    link.href = 'https://startupnextdoor.com/' + slug + '/';
+    link.href = '{{ base_url }}/' + slug + '/';
     link.style.display = '';
   } else {
     link.style.display = 'none';
@@ -486,7 +486,8 @@ loadPostList();
 
 @app.route("/")
 def editor():
-    return render_template_string(EDITOR_HTML)
+    config = load_config()
+    return render_template_string(EDITOR_HTML, base_url=config.get("base_url", "").rstrip("/"))
 
 
 @app.route("/api/preview", methods=["POST"])

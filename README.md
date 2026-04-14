@@ -72,16 +72,21 @@ cdk deploy
 ```
 
 After deploy, copy the outputs into your config:
-- **BucketName** → `S3_BUCKET` in `.env.local`  It starts with "fluffystack-blogbucket" and is followed by random letters and dashes
-- **CloudFrontDistributionId** → You'll see this in the CloudFront dashboard. Add `cloudfront_distribution_id` in `blog/config.yaml`
-- **CloudFrontDomain**
-  - Find this in CloudFront (click on your new distribution, and it's called "distribution domain name"). 
-  - It looks like "DIGITS_AND_LETTERS.cloudfront.net".
-  - Point your DNS CNAME for your domain to this.
-  - Once you've added it, go back in your CloudFront distribution in the AWS console. Under "Alternate domain names", click "add domain".
-  - Add the domain name you made the CNAME for (should be the same domain as in base_url in config.yaml)
-  - Request a certificate. This is free.
-  - Once done, you can go to your domain in a browser, but you'll get a 404 since you have no posts yet! Let's continue below.
+1. **BucketName** → `S3_BUCKET` in `.env.local`  It starts with "fluffystack-blogbucket" and is followed by random letters and dashes
+   - Run this one more time now that we have the bucket:
+   - ```
+        cd ../   # get back to top directory
+        export $(cat .env.local | xargs)
+        ```
+2. **CloudFrontDistributionId** → You'll see this in the CloudFront dashboard. Add `cloudfront_distribution_id` in `blog/config.yaml`
+3.  **CloudFrontDomain**
+    - Find this in CloudFront (click on your new distribution, and it's called "distribution domain name"). 
+    - It looks like "DIGITS_AND_LETTERS.cloudfront.net".
+    - Point your DNS CNAME for your domain to this.
+    - Once you've added it, go back in your CloudFront distribution in the AWS console. Under "Alternate domain names", click "add domain".
+    - Add the domain name you made the CNAME for (should be the same domain as in base_url in config.yaml)
+    - Request a certificate. This is free.
+    - Once done, you can go to your domain in a browser, but you'll get a 404 since you have no posts yet! Let's continue below.
 
 ## Daily usage
 
