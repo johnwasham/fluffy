@@ -1,0 +1,10 @@
+output/
+output-local/
+.env.local
+*.pyc
+__pycache__/
+.venv/
+venv/
+cdk.out/
+*.egg-info/
+.DS_Store

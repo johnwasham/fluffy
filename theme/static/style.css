@@ -1,0 +1,300 @@
+/* ============================
+   Theme Variables
+   ============================ */
+
+:root {
+  --body-bg: #efefef;
+  --code-bg: #F7FAFB;
+  --code-border: #E3EDF3;
+  --blockquote-bg: #f5f5f5;
+  --blockquote-border: #ccc;
+  --blockquote-text: #777;
+  --link: #1a4a8a;
+  --link-hover: #0d2d5e;
+  --footer-text: #888;
+  --github-bg: #f6f8fa;
+  --github-border: #ddd;
+  --github-icon: #444;
+  --github-link: #0969da;
+  --github-desc: #555;
+  --github-stats: #666;
+  --mp3-bg: #f0f0f0;
+  --mp3-border: #ddd;
+  --mp3-btn: #2e2e2e;
+  --mp3-btn-hover: #555;
+  --mp3-progress: #ccc;
+  --mp3-bar: #2e2e2e;
+  --mp3-time: #666;
+  --pagination-text: #333;
+  --card-hover-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+html[data-theme="dark"] {
+  --body-bg: #18191e;
+  --code-bg: #23253a;
+  --code-border: #30334a;
+  --blockquote-bg: #23253a;
+  --blockquote-border: #44486a;
+  --blockquote-text: #8892a4;
+  --link: #79b8ff;
+  --link-hover: #a8d1ff;
+  --footer-text: #6b7280;
+  --github-bg: #23253a;
+  --github-border: #30334a;
+  --github-icon: #8892a4;
+  --github-link: #79b8ff;
+  --github-desc: #8892a4;
+  --github-stats: #6b7280;
+  --mp3-bg: #23253a;
+  --mp3-border: #30334a;
+  --mp3-btn: #5a5f7a;
+  --mp3-btn-hover: #787da0;
+  --mp3-progress: #30334a;
+  --mp3-bar: #79b8ff;
+  --mp3-time: #6b7280;
+  --pagination-text: #d8dce8;
+  --card-hover-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+/* ============================
+   Base
+   ============================ */
+
+body {
+  background-color: var(--body-bg);
+}
+
+/* ============================
+   Code
+   ============================ */
+
+code, tt {
+  padding: 1px 3px;
+  font-family: Inconsolata, monospace, sans-serif;
+  font-size: 0.85em;
+  white-space: pre-wrap;
+  border: 1px solid var(--code-border);
+  background: var(--code-bg);
+  border-radius: 2px;
+}
+
+pre {
+  box-sizing: border-box;
+  margin: 0 0 1.75em 0;
+  border: 1px solid var(--code-border);
+  width: 100%;
+  padding: 10px;
+  font-family: Inconsolata, monospace, sans-serif;
+  font-size: 0.9em;
+  white-space: pre;
+  overflow: auto;
+  background: var(--code-bg);
+  border-radius: 3px;
+}
+
+pre code, pre tt {
+  font-size: inherit;
+  white-space: pre-wrap;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+/* ============================
+   Prism dark mode overrides
+   ============================ */
+
+html[data-theme="dark"] pre[class*="language-"],
+html[data-theme="dark"] code[class*="language-"] {
+  background: #1e2030;
+  color: #c0caf5;
+  border-color: #30334a;
+}
+
+html[data-theme="dark"] .token.comment,
+html[data-theme="dark"] .token.prolog,
+html[data-theme="dark"] .token.doctype,
+html[data-theme="dark"] .token.cdata { color: #565f89; font-style: italic; }
+
+html[data-theme="dark"] .token.punctuation { color: #c0caf5; }
+
+html[data-theme="dark"] .token.property,
+html[data-theme="dark"] .token.tag,
+html[data-theme="dark"] .token.boolean,
+html[data-theme="dark"] .token.number,
+html[data-theme="dark"] .token.constant,
+html[data-theme="dark"] .token.symbol { color: #ff9e64; }
+
+html[data-theme="dark"] .token.selector,
+html[data-theme="dark"] .token.attr-name,
+html[data-theme="dark"] .token.string,
+html[data-theme="dark"] .token.char,
+html[data-theme="dark"] .token.builtin { color: #9ece6a; }
+
+html[data-theme="dark"] .token.operator,
+html[data-theme="dark"] .token.entity,
+html[data-theme="dark"] .token.url,
+html[data-theme="dark"] .language-css .token.string,
+html[data-theme="dark"] .style .token.string { color: #7dcfff; }
+
+html[data-theme="dark"] .token.atrule,
+html[data-theme="dark"] .token.attr-value,
+html[data-theme="dark"] .token.keyword { color: #bb9af7; }
+
+html[data-theme="dark"] .token.function,
+html[data-theme="dark"] .token.class-name { color: #7aa2f7; }
+
+html[data-theme="dark"] .token.regex,
+html[data-theme="dark"] .token.important,
+html[data-theme="dark"] .token.variable { color: #f7768e; }
+
+/* ============================
+   Post content
+   ============================ */
+
+.post-content a { color: var(--link); text-decoration: underline; }
+.post-content a:hover { color: var(--link-hover); }
+
+.post-content blockquote {
+  border-left: 4px solid var(--blockquote-border);
+  background: var(--blockquote-bg);
+  color: var(--blockquote-text);
+  margin-left: 0;
+  padding: 0.7rem 1rem;
+}
+
+.post-content blockquote p { color: var(--blockquote-text); }
+
+.post-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1rem 0;
+}
+
+.post-content iframe {
+  display: block;
+  margin: 1.75em 0;
+  max-width: 100%;
+}
+
+/* ============================
+   Cards
+   ============================ */
+
+.card:hover { box-shadow: var(--card-hover-shadow); }
+.card .card-image figure { margin: 0; }
+
+/* ============================
+   Footer
+   ============================ */
+
+.footer { color: var(--footer-text); }
+
+/* ============================
+   Pagination
+   ============================ */
+
+.pagination-previous, .pagination-next { color: var(--pagination-text) !important; }
+
+/* ============================
+   GitHub Widget
+   ============================ */
+
+.github-card {
+  border: 1px solid var(--github-border);
+  border-radius: 6px;
+  padding: 1.2rem 1.5rem;
+  margin: 1.5rem 0;
+  background: var(--github-bg);
+}
+
+.github-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.github-icon { width: 20px; height: 20px; color: var(--github-icon); flex-shrink: 0; }
+
+.github-repo-link { font-size: 0.9rem; font-weight: 700; color: var(--github-link); text-decoration: none; }
+.github-repo-link:hover { text-decoration: underline; }
+
+.github-description { font-size: 0.85rem; color: var(--github-desc); margin: 0 0 0.8rem 0; line-height: 1.5; }
+
+.github-stats { display: flex; gap: 1.2rem; font-size: 0.8rem; color: var(--github-stats); }
+
+/* ============================
+   MP3 Player
+   ============================ */
+
+.mp3-player {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--mp3-bg);
+  border: 1px solid var(--mp3-border);
+  border-radius: 4px;
+  padding: 0.8rem 1.2rem;
+  margin: 1.5rem 0;
+}
+
+.mp3-play-btn {
+  background: var(--mp3-btn);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mp3-play-btn:hover { background: var(--mp3-btn-hover); }
+
+.mp3-progress-wrap {
+  flex: 1;
+  height: 6px;
+  background: var(--mp3-progress);
+  border-radius: 3px;
+  cursor: pointer;
+  position: relative;
+}
+
+.mp3-progress-bar {
+  height: 100%;
+  width: 0;
+  background: var(--mp3-bar);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.mp3-time { font-size: 0.75rem; color: var(--mp3-time); flex-shrink: 0; min-width: 3rem; text-align: right; }
+
+/* ============================
+   Post card text (index/paginated pages)
+   ============================ */
+
+/* Bulma's has-text-dark / has-text-grey-dark are literal colors — override for dark mode */
+html[data-theme="dark"] .card-content .has-text-dark,
+html[data-theme="dark"] .card-content a.has-text-dark { color: #d8dce8 !important; }
+html[data-theme="dark"] .card-content .has-text-grey-dark { color: #9299b0 !important; }
+html[data-theme="dark"] .card-content .has-text-grey { color: #7880a0 !important; }
+
+/* ============================
+   Theme toggle button
+   ============================ */
+
+#theme-toggle {
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+  padding: 0.5rem 0.75rem;
+  display: flex;
+  align-items: center;
+}

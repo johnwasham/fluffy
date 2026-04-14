@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Posts tagged &ldquo;{{ tag }}&rdquo; &mdash; {{ config.title }}{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <h1 class="title mb-5">Posts tagged &ldquo;{{ tag }}&rdquo;</h1>
+
+        {% for post in posts %}
+        <article class="card mb-5">
+          {% if post.feature_image %}
+          <div class="card-image">
+            <a href="{{ post.url }}">
+              <img src="{{ post.feature_image }}" alt="{{ post.title }}" style="width:100%; height:220px; object-fit:cover; display:block;">
+            </a>
+          </div>
+          {% endif %}
+          <div class="card-content">
+            <p class="is-size-7 has-text-grey mb-1">
+              <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%B %-d, %Y') }}</time>
+            </p>
+            <h2 class="title is-4 mb-2">
+              <a href="{{ post.url }}" class="has-text-dark">{{ post.title }}</a>
+            </h2>
+            <p class="has-text-grey-dark">{{ post.excerpt }}</p>
+            <a class="button is-small is-link is-light mt-2" href="{{ post.url }}">Read more</a>
+          </div>
+        </article>
+        {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

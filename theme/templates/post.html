@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} &mdash; {{ config.title }}{% endblock %}
+
+{% block head %}
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="{{ post.url }}">
+{% if post.feature_image %}<meta property="og:image" content="{{ post.feature_image }}">{% endif %}
+{% endblock %}
+
+{% block content %}
+
+{% if post.feature_image %}
+<section class="hero is-medium" style="background-image: url('{{ post.feature_image }}'); background-size: cover; background-position: center;">
+  <div class="hero-body" style="background: rgba(0,0,0,0.35);">
+    <div class="container has-text-centered">
+      <p class="title has-text-white">{{ post.title }}</p>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+
+        {% if not post.feature_image %}
+        <h1 class="title is-2">{{ post.title }}</h1>
+        {% endif %}
+
+        <p class="is-size-7 has-text-grey mb-3">
+          <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%B %-d, %Y') }}</time>
+          &mdash; {{ config.author }}
+        </p>
+
+        {% if post.tags %}
+        <div class="tags mb-4">
+          {% for tag in post.tags %}<a class="tag is-info is-light" href="{{ config.base_url }}/tag/{{ tag | lower | replace(' ', '-') }}/">{{ tag }}</a>{% endfor %}
+        </div>
+        {% endif %}
+
+        <hr>
+
+        <div class="content post-content">
+          {{ post.html | safe }}
+        </div>
+
+        <hr>
+
+        {% if next_post or prev_post %}
+        <nav class="level mt-5">
+          <div class="level-left">
+            {% if prev_post %}
+            <div class="level-item">
+              <div>
+                <p class="is-size-7 has-text-grey has-text-weight-semibold mb-1">PREVIOUS</p>
+                <a href="{{ prev_post.url }}">{{ prev_post.title }}</a>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          <div class="level-right">
+            {% if next_post %}
+            <div class="level-item">
+              <div class="has-text-right">
+                <p class="is-size-7 has-text-grey has-text-weight-semibold mb-1">NEXT</p>
+                <a href="{{ next_post.url }}">{{ next_post.title }}</a>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </nav>
+        {% endif %}
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if config.disqus_shortname and post.disqus_id %}
+<section class="section pt-0">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div id="disqus_thread"></div>
+        <script type="text/javascript">
+          var disqus_shortname = '{{ config.disqus_shortname }}';
+          var disqus_identifier = '/{{ post.disqus_id }}/';
+          var disqus_url = '{{ post.url }}';
+          (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+          })();
+        </script>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}{{ config.title }}{% if page > 1 %} &mdash; Page {{ page }}{% endif %}{% endblock %}
+
+{% block content %}
+{% if page == 1 and config.hero_image %}
+<section class="hero is-medium" style="background-image: url('{{ config.base_url }}{{ config.hero_image }}'); background-size: cover; background-position: center;">
+  <div class="hero-body" style="background: rgba(0,0,0,0.35);">
+    <div class="container has-text-centered">
+      <p class="title has-text-white">{{ config.title }}</p>
+      {% if config.hero_subtitle %}<p class="subtitle has-text-white">{{ config.hero_subtitle }}</p>{% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+
+        {% for post in posts %}
+        <article class="card mb-5">
+          {% if post.feature_image %}
+          <div class="card-image">
+            <a href="{{ post.url }}">
+              <img src="{{ post.feature_image }}" alt="{{ post.title }}" style="width:100%; height:220px; object-fit:cover; display:block;">
+            </a>
+          </div>
+          {% endif %}
+          <div class="card-content">
+            <p class="is-size-7 has-text-grey mb-1">
+              <time datetime="{{ post.date.isoformat() }}">{{ post.date.strftime('%B %-d, %Y') }}</time>
+            </p>
+            <h2 class="title is-4 mb-2">
+              <a href="{{ post.url }}" class="has-text-dark">{{ post.title }}</a>
+            </h2>
+            {% if post.tags %}
+            <div class="tags mb-2">
+              {% for tag in post.tags %}<a class="tag is-info is-light" href="{{ config.base_url }}/tag/{{ tag | lower | replace(' ', '-') }}/">{{ tag }}</a>{% endfor %}
+            </div>
+            {% endif %}
+            <p class="has-text-grey-dark">{{ post.excerpt }}</p>
+            <a class="button is-small is-link is-light mt-2" href="{{ post.url }}">Read more</a>
+          </div>
+        </article>
+        {% endfor %}
+
+        <nav class="pagination is-centered mt-6" role="navigation">
+          {% if page > 1 %}
+          <a class="pagination-previous" href="{{ config.base_url }}{% if page == 2 %}/{% else %}/page/{{ page - 1 }}/{% endif %}">Newer posts</a>
+          {% endif %}
+          {% if has_next %}
+          <a class="pagination-next" href="{{ config.base_url }}/page/{{ page + 1 }}/">Older posts</a>
+          {% endif %}
+        </nav>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
