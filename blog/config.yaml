@@ -5,6 +5,6 @@ disqus_shortname:
 cloudfront_distribution_id: 
 posts_per_page: 10
 profile_image: /images/your_photo.jpg
-bio: I short biography about you. Who are you? What are your hobbies?
+bio: A short biography about you. Who are you? What are your hobbies?
 hero_image: 
 hero_subtitle: A subtitle to describe your blog (update in config.yaml)
