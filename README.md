@@ -74,14 +74,14 @@ cdk deploy
 After deploy, copy the outputs into your config:
 - **BucketName** → `S3_BUCKET` in `.env.local`  It starts with "fluffystack-blogbucket" and is followed by random letters and dashes
 - **CloudFrontDistributionId** → You'll see this in the CloudFront dashboard. Add `cloudfront_distribution_id` in `blog/config.yaml`
-- **CloudFrontDomain** → Find this in CloudFront (click on your new distribution). It looks like "DIGITS_AND_LETTERS.cloudfront.net". Point your DNS CNAME for your domain to this.
-
-### 5. Build and publish
-
-```bash
-python3 src/builder.py    # generate static HTML into output/
-python3 src/publisher.py  # upload to S3 and invalidate CloudFront
-```
+- **CloudFrontDomain**
+  - Find this in CloudFront (click on your new distribution, and it's called "distribution domain name"). 
+  - It looks like "DIGITS_AND_LETTERS.cloudfront.net".
+  - Point your DNS CNAME for your domain to this.
+  - Once you've added it, go back in your CloudFront distribution in the AWS console. Under "Alternate domain names", click "add domain".
+  - Add the domain name you made the CNAME for (should be the same domain as in base_url in config.yaml)
+  - Request a certificate. This is free.
+  - Once done, you can go to your domain in a browser, but you'll get a 404 since you have no posts yet! Let's continue below.
 
 ## Daily usage
 
@@ -100,9 +100,30 @@ Open [http://localhost:8080](http://localhost:8080) in your browser.
 - **Publish** — saves, builds, and uploads to S3 in one click
 - `Cmd+S` / `Ctrl+S` — save draft
 
-> **Note** When publishing via the editor, you don't need to run builder.py or publisher.py 😊
+> **Note** This is all you need. Get writing and publish some gold from your beautiful human mind! 😊
 
-## Post format
+---
+
+## Extras
+
+You don't need to know all this below. You can just use the UI provided by server.py. All the info below is just here for reference.
+
+### Debugging Style Changes
+
+Run this if you're making stylesheet or template changes and want to see them locally:
+
+```bash
+python3 src/builder.py --local && cd output-local && python3 -m http.server 8000
+```
+
+### To Manually Build and publish
+
+```bash
+python3 src/builder.py    # generate static HTML into output/
+python3 src/publisher.py  # upload to S3 and invalidate CloudFront
+```
+
+### Post format
 
 Posts are stored as Markdown files in `blog/posts/YYYY/MM/slug.md` with YAML frontmatter:
 
@@ -122,7 +143,7 @@ Post content here. Custom HTML blocks (YouTube embeds, tweets, etc.) are preserv
 
 Setting `status: draft` excludes the post from builds and removes it from S3 on the next publish.
 
-## Project structure
+### Project structure
 
 ```
 blog/posts/YYYY/MM/slug.md   markdown posts
@@ -134,12 +155,4 @@ src/                         Python application code
 infra/                       AWS CDK stack
 output/                      generated HTML — do not commit
 .env.local                   AWS credentials — do not commit
-```
-
-## Debugging Style Changes
-
-Run this if you're making stylesheet or template changes and want to see them locally:
-
-```bash
-python3 src/builder.py --local && cd output-local && python3 -m http.server 8000
 ```
