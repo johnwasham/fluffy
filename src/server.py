@@ -68,6 +68,13 @@ EDITOR_HTML = """<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Fluffy Editor</title>
+  <script>
+  (function(){
+    var t = localStorage.getItem('fluffy-theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+  </script>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
@@ -88,6 +95,7 @@ EDITOR_HTML = """<!DOCTYPE html>
       flex: 1; resize: none; border: none; outline: none;
       padding: 1rem; font-family: 'Source Code Pro', monospace;
       font-size: 15px; line-height: 1.7;
+      background: #fff; color: #222;
     }
     #preview-frame { width: 100%; height: 100%; border: none; }
     .sidebar-post {
@@ -105,11 +113,29 @@ EDITOR_HTML = """<!DOCTYPE html>
       transition: background 0.15s;
     }
     .divider:hover, .divider.dragging { background: #3273dc; }
-    #title-input { border: none; border-bottom: 1px solid #dbdbdb; padding: 0.5rem 1rem; font-size: 1.2rem; font-weight: 600; outline: none; width: 100%; }
+    #title-input { border: none; border-bottom: 1px solid #dbdbdb; padding: 0.5rem 1rem; font-size: 1.2rem; font-weight: 600; outline: none; width: 100%; background: transparent; color: inherit; }
     .post-meta { display: flex; gap: 1rem; padding: 0.4rem 1rem; font-size: 0.8rem; background: #fafafa; border-bottom: 1px solid #efefef; flex-wrap: wrap; align-items: center; }
-    .post-meta input { border: none; border-bottom: 1px solid #dbdbdb; font-size: 0.8rem; padding: 0.1rem 0.3rem; min-width: 100px; outline: none; }
+    .post-meta input { border: none; border-bottom: 1px solid #dbdbdb; font-size: 0.8rem; padding: 0.1rem 0.3rem; min-width: 100px; outline: none; background: transparent; color: inherit; }
     .preview-pane iframe { width: 100%; height: 100%; border: none; }
-    #status-bar { font-size: 0.8rem; color: #666; margin-left: auto; }
+    #status-bar { font-size: 0.8rem; color: #888; margin-left: auto; }
+    #theme-toggle-btn { cursor: pointer; background: none; border: none; color: #fff; opacity: 0.8; padding: 0.3rem 0.5rem; font-size: 1rem; line-height: 1; display: flex; align-items: center; }
+    #theme-toggle-btn:hover { opacity: 1; }
+
+    /* Dark mode overrides for editor shell */
+    html[data-theme="dark"] body { background: #18191e; color: #d8dce8; }
+    html[data-theme="dark"] .sidebar { background: #1e1f26; border-color: #30334a; }
+    html[data-theme="dark"] .sidebar-post { border-color: #2a2c3a; color: #c0c8d8; }
+    html[data-theme="dark"] .sidebar-post:hover { background: #25273a; }
+    html[data-theme="dark"] .sidebar-post.active { background: #1a2a3a; border-left-color: #79b8ff; }
+    html[data-theme="dark"] .sidebar > div { color: #5a6080; }
+    html[data-theme="dark"] .toolbar { background: #23253a; border-color: #30334a; }
+    html[data-theme="dark"] .post-meta { background: #1e1f26; border-color: #30334a; color: #9299b0; }
+    html[data-theme="dark"] .post-meta input { border-color: #44486a; color: #d8dce8; }
+    html[data-theme="dark"] #title-input { border-color: #30334a; color: #e8ecf4; }
+    html[data-theme="dark"] #markdown-input { background: #1a1b22; color: #c8d0e0; }
+    html[data-theme="dark"] .preview-pane { background: #18191e; border-color: #30334a; }
+    html[data-theme="dark"] .divider { background: #30334a; }
+    html[data-theme="dark"] .divider:hover, html[data-theme="dark"] .divider.dragging { background: #79b8ff; }
   </style>
 </head>
 <body>
@@ -130,8 +156,16 @@ EDITOR_HTML = """<!DOCTYPE html>
     <div class="navbar-start">
       <div class="navbar-item" style="padding-left:2rem;"><button class="button is-small is-primary" onclick="newPost()">+ New Post</button></div>
     </div>
-    <div class="navbar-end" style="padding-right:1rem; align-items:center; display:flex;">
+    <div class="navbar-end" style="padding-right:1rem; align-items:center; display:flex; gap:0.5rem;">
       <span id="status-bar"></span>
+      <button id="theme-toggle-btn" onclick="toggleEditorTheme()" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <span id="editor-icon-sun" style="display:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </span>
+        <span id="editor-icon-moon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </span>
+      </button>
     </div>
   </div>
 </nav>
@@ -177,6 +211,24 @@ EDITOR_HTML = """<!DOCTYPE html>
 let previewTimer = null;
 let dirty = false;
 let currentStatus = 'draft';
+
+function updateEditorThemeToggle(theme) {
+  document.getElementById('editor-icon-sun').style.display = theme === 'dark' ? '' : 'none';
+  document.getElementById('editor-icon-moon').style.display = theme === 'dark' ? 'none' : '';
+}
+
+function toggleEditorTheme() {
+  var current = document.documentElement.getAttribute('data-theme') || 'light';
+  var next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('fluffy-theme', next);
+  updateEditorThemeToggle(next);
+  schedulePreview();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  updateEditorThemeToggle(document.documentElement.getAttribute('data-theme') || 'light');
+});
 
 function setUnpublishBtn(status) {
   currentStatus = status;

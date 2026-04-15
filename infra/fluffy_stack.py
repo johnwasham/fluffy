@@ -42,6 +42,23 @@ class FluffyStack(cdk.Stack):
             removal_policy=cdk.RemovalPolicy.RETAIN,
         )
 
+        # Cache policy that includes query strings in the cache key so that
+        # versioned URLs like style.css?v=abc123 are cached independently,
+        # enabling cache busting without a CloudFront invalidation.
+        cache_policy = cloudfront.CachePolicy(
+            self,
+            "BlogCachePolicy",
+            cache_policy_name="Fluffy-QueryString-Cache",
+            default_ttl=cdk.Duration.days(1),
+            max_ttl=cdk.Duration.days(365),
+            min_ttl=cdk.Duration.seconds(0),
+            query_string_behavior=cloudfront.CacheQueryStringBehavior.all(),
+            header_behavior=cloudfront.CacheHeaderBehavior.none(),
+            cookie_behavior=cloudfront.CacheCookieBehavior.none(),
+            enable_accept_encoding_gzip=True,
+            enable_accept_encoding_brotli=True,
+        )
+
         # CloudFront distribution
         distribution = cloudfront.Distribution(
             self,
@@ -49,7 +66,7 @@ class FluffyStack(cdk.Stack):
             default_behavior=cloudfront.BehaviorOptions(
                 origin=origins.S3StaticWebsiteOrigin(bucket),
                 viewer_protocol_policy=cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-                cache_policy=cloudfront.CachePolicy.CACHING_OPTIMIZED,
+                cache_policy=cache_policy,
                 allowed_methods=cloudfront.AllowedMethods.ALLOW_GET_HEAD,
                 compress=True,
             ),

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Static site generator for Fluffy blog."""
 
-import os
+import hashlib
 import re
 import shutil
 import xml.etree.ElementTree as ET
@@ -106,6 +106,9 @@ def build(verbose=True, local=False):
     env = Environment(loader=FileSystemLoader(str(THEME_DIR / "templates")))
     env.globals["now"] = datetime.now(tz=timezone.utc)
     env.globals["config"] = tmpl_config
+
+    css_path = THEME_DIR / "static" / "style.css"
+    env.globals["css_version"] = hashlib.md5(css_path.read_bytes()).hexdigest()[:8] if css_path.exists() else "1"
 
     # Clean and recreate output
     if out_dir.exists():
