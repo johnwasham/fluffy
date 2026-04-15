@@ -185,7 +185,7 @@ EDITOR_HTML = """<!DOCTYPE html>
       <label>Tags: <input id="meta-tags" type="text" placeholder="tag1, tag2" oninput="onMetaChange(); schedulePreview()"></label>
       <label>Feature image: <input id="meta-image" type="text" placeholder="/images/header.jpg" style="min-width:180px;" oninput="onMetaChange(); schedulePreview()"></label>
       <label style="cursor:pointer;">
-        <span class="button is-small is-info" onclick="document.getElementById('image-upload').click()">Upload image</span>
+        <span class="button is-small is-info">Upload image</span>
         <input id="image-upload" type="file" accept="image/*" style="display:none;" onchange="uploadImage(this)">
       </label>
     </div>
@@ -211,6 +211,7 @@ EDITOR_HTML = """<!DOCTYPE html>
 let previewTimer = null;
 let dirty = false;
 let currentStatus = 'draft';
+const AUTHOR = '{{ author }}';
 
 function updateEditorThemeToggle(theme) {
   document.getElementById('editor-icon-sun').style.display = theme === 'dark' ? '' : 'none';
@@ -309,8 +310,8 @@ function updatePreview() {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css">
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.30.0/themes/prism.min.css">
 </head>
 <body>
   ${image ? `<section class="hero is-medium" style="background-image:url('${image}');background-size:cover;background-position:center;"><div class="hero-body" style="background:rgba(0,0,0,0.35);"><div class="container has-text-centered"><p class="title has-text-white">${title}</p></div></div></section>` : ''}
@@ -318,13 +319,18 @@ function updatePreview() {
     <div class="container">
       <div class="columns is-centered">
         <div class="column is-8">
-          ${!image && title ? `<h1 class="title is-2">${title}</h1>` : ''}
-          <p class="is-size-7 has-text-grey mb-3">
-            <time>${dateVal ? formatPreviewDate(dateVal) : '(date TBD)'}</time>
-          </p>
-          ${tags.length ? `<div class="tags mb-4">${tags.map(t => `<span class="tag is-info is-light">${t}</span>`).join('')}</div>` : ''}
-          <hr>
-          <div class="content post-content">${data.html}</div>
+          <article class="card">
+            <div class="card-content">
+              ${!image && title ? `<h1 class="title is-2">${title}</h1>` : ''}
+              <p class="is-size-7 has-text-grey mb-3">
+                <time>${dateVal ? formatPreviewDate(dateVal) : '(date TBD)'}</time>
+                ${AUTHOR ? ` &mdash; ${AUTHOR}` : ''}
+              </p>
+              ${tags.length ? `<div class="tags mb-4">${tags.map(t => `<span class="tag is-info is-light">${t}</span>`).join('')}</div>` : ''}
+              <hr>
+              <div class="content post-content">${data.html}</div>
+            </div>
+          </article>
         </div>
       </div>
     </div>
@@ -539,7 +545,11 @@ loadPostList();
 @app.route("/")
 def editor():
     config = load_config()
-    return render_template_string(EDITOR_HTML, base_url=config.get("base_url", "").rstrip("/"))
+    return render_template_string(
+        EDITOR_HTML,
+        base_url=config.get("base_url", "").rstrip("/"),
+        author=config.get("author", ""),
+    )
 
 
 @app.route("/api/preview", methods=["POST"])
