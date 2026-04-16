@@ -1,4 +1,4 @@
-<img src="readme-images/fluffy.svg" alt="fluffy logo" width="200"/>
+![fluffy logo](/readme-images/fluffy-logo.png)
 
 # fluffy
 
