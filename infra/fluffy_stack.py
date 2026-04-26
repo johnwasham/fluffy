@@ -22,7 +22,7 @@ from constructs import Construct
 
 
 class FluffyStack(cdk.Stack):
-    def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
+    def __init__(self, scope: Construct, construct_id: str, blog_name: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # S3 bucket for static site content
@@ -48,7 +48,7 @@ class FluffyStack(cdk.Stack):
         cache_policy = cloudfront.CachePolicy(
             self,
             "BlogCachePolicy",
-            cache_policy_name="Fluffy-QueryString-Cache",
+            cache_policy_name=f"Fluffy-QueryString-Cache-{blog_name}",
             default_ttl=cdk.Duration.days(1),
             max_ttl=cdk.Duration.days(365),
             min_ttl=cdk.Duration.seconds(0),
@@ -81,7 +81,7 @@ class FluffyStack(cdk.Stack):
                 ),
             ],
             price_class=cloudfront.PriceClass.PRICE_CLASS_ALL,
-            comment="Fluffy blog",
+            comment=f"Fluffy Blog - {blog_name}",
         )
 
         # Outputs

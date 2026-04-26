@@ -62,6 +62,8 @@ The IAM user needs permissions for CloudFormation, S3, CloudFront, IAM to bootst
 
 ### 4. Deploy AWS infrastructure
 
+In `infra/app.py`, add your blog name to the stack name in both places.
+
 ```bash
 npm install -g aws-cdk            # install CDK CLI
 cd infra

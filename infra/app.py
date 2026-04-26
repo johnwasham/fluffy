@@ -4,6 +4,7 @@ from fluffy_stack import FluffyStack
 
 app = cdk.App()
 
-FluffyStack(app, "FluffyStack")
+# Adding the blog name allows your blog to coexist with other Fluffy blogs in your AWS account.
+FluffyStack(app, "FluffyStack-YourBlog", blog_name="YourBlog")
 
 app.synth()
